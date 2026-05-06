@@ -81,14 +81,14 @@ bot.start(async (ctx) => {
 
         // Callback buttons တွေကို ဖြုတ်ပြီး Link buttons တွေနဲ့ အစားထိုးထားပါတယ်
         await ctx.reply(welcomeMsg, Markup.inlineKeyboard([
-            [Markup.button.url('🌟 Official Channel', 'https://t.me/MinSaiZayYar')], // Row 1
+            [Markup.button.url('🌟 Official Channel', 'https://t.me/myanmarbot_music')], // Row 1
             [
-                Markup.button.url('📢 Group Link', 'https://t.me/MinSaiZayYar'), 
-                Markup.button.url('🔗 Sub Channel', 'https://t.me/MinSaiZayYar')
+                Markup.button.url('📢 Group Link', 'https://t.me/myanmar_music_Bot2027'), 
+                Markup.button.url('🔗 Sub Channel', 'https://t.me/HANTHAR_1999')
             ], // Row 2
             [
-                Markup.button.url('👤 Admin Contact', 'https://t.me/MinSaiZayYar'), 
-                Markup.button.url('📁 More Bots', 'https://t.me/MinSaiZayYar')
+                Markup.button.url('👤 Admin Contact', 'https://t.me/HEX_KING9'), 
+                Markup.button.url('📁 More Bots', 'https://t.me/myanmarbot_music/7')
             ]  // Row 3
         ]));
     } catch (err) {
