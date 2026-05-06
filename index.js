@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config(); // require ကို lowercase နဲ့ ပြင်ထားပါတယ်
 const { Telegraf, Markup } = require('telegraf');
 const mongoose = require('mongoose');
 const imghash = require('imghash');
@@ -71,7 +71,7 @@ mongoose.connect(process.env.Mongodb_url).then(async () => {
 
 const bot = new Telegraf(process.env.myWaifusBot);
 
-// --- 4. START COMMAND WITH BUTTONS ---
+// --- 4. START COMMAND WITH ALL URL BUTTONS ---
 bot.start(async (ctx) => {
     try {
         let welcomeMsg = "🌸 Waifu Bot မှ ကြိုဆိုပါတယ် ✨";
@@ -79,16 +79,17 @@ bot.start(async (ctx) => {
             welcomeMsg = fs.readFileSync('Welcome.txt', 'utf8');
         }
 
+        // Callback buttons တွေကို ဖြုတ်ပြီး Link buttons တွေနဲ့ အစားထိုးထားပါတယ်
         await ctx.reply(welcomeMsg, Markup.inlineKeyboard([
-            [Markup.button.callback('🌟 Main Feature', 'main_feat')], // Row 1: Single Button
+            [Markup.button.url('🌟 Official Channel', 'https://t.me/MinSaiZayYar')], // Row 1
             [
-                Markup.button.url('📢 Channel', 'https://t.me/MinSaiZayYar'), 
-                Markup.button.callback('🔍 Search Help', 'help_search')
-            ], // Row 2: Two Buttons
+                Markup.button.url('📢 Group Link', 'https://t.me/MinSaiZayYar'), 
+                Markup.button.url('🔗 Sub Channel', 'https://t.me/MinSaiZayYar')
+            ], // Row 2
             [
-                Markup.button.url('👤 Support', 'https://t.me/MinSaiZayYar'), 
-                Markup.button.callback('📊 Stats', 'view_stats')
-            ]  // Row 3: Two Buttons
+                Markup.button.url('👤 Admin Contact', 'https://t.me/MinSaiZayYar'), 
+                Markup.button.url('📁 More Bots', 'https://t.me/MinSaiZayYar')
+            ]  // Row 3
         ]));
     } catch (err) {
         console.error(err);
@@ -116,13 +117,11 @@ const handleSearch = async (ctx) => {
         const tagData = await Command.findOne({ userId: targetId });
         const userTag = tagData ? `${tagData.cmd} ` : "";
 
-        // Fast Match
         const fast = await Item.findOne({ file_unique_ids: uId });
         if (fast) {
             return ctx.reply(`⚡ Instant Match: \`${userTag}${fast.name}\``, { parse_mode: 'MarkdownV2', reply_to_message_id: msg.message_id });
         }
 
-        // Visual Match
         ctx.sendChatAction('typing');
         const link = await ctx.telegram.getFileLink(thumbId);
         const userHash = await getHashFromUrl(link.href);
@@ -183,15 +182,7 @@ bot.command('delWa', checkSudo, async (ctx) => {
     result ? ctx.reply(`🗑️ Deleted: **${result.name}**`) : ctx.reply("❌ Not found.");
 });
 
-// --- 7. BUTTON CALLBACKS ---
-bot.action('help_search', (ctx) => ctx.answerCbQuery("ပုံပို့ပြီး ရှာနိုင်ပါတယ်!", { show_alert: true }));
-bot.action('view_stats', async (ctx) => {
-    const count = await Item.countDocuments();
-    ctx.answerCbQuery(`စုစုပေါင်း Waifu ${count} ခု ရှိပါတယ်`, { show_alert: true });
-});
-bot.action('main_feat', (ctx) => ctx.answerCbQuery("This is the main button feature!"));
-
-// --- 8. INITIALIZE ---
+// --- 7. INITIALIZE ---
 bot.command(['wa', 'waifu'], handleSearch);
 bot.on(['photo', 'video'], handleSearch);
 
